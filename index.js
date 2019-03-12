@@ -13,6 +13,7 @@ const RESOURCE_API_CLOUDWATCH_LOGS_ROLE = "GraphQlApiCloudWatchLogsRole";
 const RESOURCE_API_KEY = "GraphQlApiKeyDefault";
 const RESOURCE_SCHEMA = "GraphQlSchema";
 const RESOURCE_URL = "GraphQlApiUrl";
+const GRAPHQL_PARSE_OPTIONS = {allowLegacySDLImplementsInterfaces: true};
 
 class ServerlessAppsyncPlugin {
   constructor(serverless, options) {
@@ -183,7 +184,7 @@ class ServerlessAppsyncPlugin {
 
   validateSchemas() {
     const schemas = this.getSchemas();
-    const asts = schemas.map(schema => buildASTSchema(parse(schema)));
+    const asts = schemas.map(schema => buildASTSchema(parse(schema, GRAPHQL_PARSE_OPTIONS)));
     const errors = asts.reduce((accumulatedErrors, currentAst) => {
       const currentErrors = validateSchema(currentAst);
       if (!currentErrors.length) {
